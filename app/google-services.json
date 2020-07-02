@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "482597922406",
+    "firebase_url": "https://findmore-efb2f.firebaseio.com",
+    "project_id": "findmore-efb2f",
+    "storage_bucket": "findmore-efb2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482597922406:android:c01a6cfa424b476db12fa7",
+        "android_client_info": {
+          "package_name": "com.findmore.findmore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "482597922406-ujqfdnhm9gcoagthkhilrdrip79473gs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNgUfr9qUyURmGGdTTsbcT-eclYClIBx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "482597922406-ujqfdnhm9gcoagthkhilrdrip79473gs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
