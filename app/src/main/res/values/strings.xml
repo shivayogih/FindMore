@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">FindMore</string>
-    <string name="text_recognition">Text Recognition</string>
+
     <string name="face_recognition">Face Recognition</string>
+    <string name="firebase_ml_kit">Firebase ML Kit</string>
+    <string name="text_recognition">Text Recognition</string>
+    <string name="face_detection">Face Detection</string>
+    <string name="barcode_scanning">Barcode Scanning</string>
     <string name="image_labeling">Image Labeling</string>
+    <string name="landmark_recognition">Landmark Recognition</string>
+    <string name="language_identification">Language Identification</string>
+    <string name="smart_reply">Smart Reply</string>
+    <string name="custom_models">Custom Models</string>
 </resources>
