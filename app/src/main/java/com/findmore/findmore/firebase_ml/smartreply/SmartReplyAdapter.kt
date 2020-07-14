@@ -1,4 +1,4 @@
-package com.findmore.findmore.smartreply
+package com.findmore.findmore.firebase_ml.smartreply
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable

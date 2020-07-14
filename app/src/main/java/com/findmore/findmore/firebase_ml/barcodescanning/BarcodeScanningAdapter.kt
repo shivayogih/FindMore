@@ -1,4 +1,4 @@
-package com.findmore.findmore.barcodescanning
+package com.findmore.findmore.firebase_ml.barcodescanning
 
 import android.annotation.SuppressLint
 import android.content.Context

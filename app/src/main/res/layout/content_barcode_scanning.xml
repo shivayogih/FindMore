@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#eee"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".barcodescanning.BarcodeScanningActivity"
+    tools:context=".firebase_ml.barcodescanning.BarcodeScanningActivity"
     tools:showIn="@layout/activity_barcode_scanning">
 
     <ImageView

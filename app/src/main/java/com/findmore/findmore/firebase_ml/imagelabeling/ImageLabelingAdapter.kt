@@ -1,4 +1,4 @@
-package com.findmore.findmore.imagelabeling
+package com.findmore.findmore.firebase_ml.imagelabeling
 
 import android.annotation.SuppressLint
 import android.content.Context

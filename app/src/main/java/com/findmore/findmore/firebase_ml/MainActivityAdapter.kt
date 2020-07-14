@@ -1,4 +1,4 @@
-package com.findmore.findmore
+package com.findmore.findmore.firebase_ml
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,21 +9,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.findmore.findmore.barcodescanning.BarcodeScanningActivity
+import com.findmore.findmore.R
+import com.findmore.findmore.firebase_ml.barcodescanning.BarcodeScanningActivity
 
-import com.findmore.findmore.facedetection.FaceDetectionActivity
-import com.findmore.findmore.imagelabeling.ImageLabelingActivity
-import com.findmore.findmore.landmarkrecognition.LandmarkRecognitionActivity
-import com.findmore.findmore.languageidentification.LanguageIdentificationActivity
-import com.findmore.findmore.smartreply.SmartReplyActivity
-import com.findmore.findmore.textrecognition.TextRecognitionActivity
+import com.findmore.findmore.firebase_ml.facedetection.FaceDetectionActivity
+import com.findmore.findmore.firebase_ml.imagelabeling.ImageLabelingActivity
+import com.findmore.findmore.firebase_ml.landmarkrecognition.LandmarkRecognitionActivity
+import com.findmore.findmore.firebase_ml.languageidentification.LanguageIdentificationActivity
+import com.findmore.findmore.firebase_ml.smartreply.SmartReplyActivity
+import com.findmore.findmore.firebase_ml.textrecognition.TextRecognitionActivity
 
 
 class MainActivityAdapter(private val context: Context) : RecyclerView.Adapter<MainActivityAdapter.MainActivityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityViewHolder {
         return MainActivityViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_main_activity, parent, false)
+            LayoutInflater.from(context).inflate(
+                R.layout.item_main_activity,
+                parent,
+                false
+            )
         )
     }
 

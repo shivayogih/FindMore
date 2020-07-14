@@ -1,4 +1,4 @@
-package com.findmore.findmore.facedetection
+package com.findmore.findmore.firebase_ml.facedetection
 
 import android.app.Activity
 import android.content.Intent

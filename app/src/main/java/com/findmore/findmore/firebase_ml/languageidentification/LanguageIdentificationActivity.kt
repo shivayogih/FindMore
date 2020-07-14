@@ -1,4 +1,4 @@
-package com.findmore.findmore.languageidentification
+package com.findmore.findmore.firebase_ml.languageidentification
 
 import android.os.Bundle
 

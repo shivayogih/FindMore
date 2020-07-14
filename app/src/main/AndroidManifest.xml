@@ -30,7 +30,7 @@
             android:value="ocr,face,barcode,label" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,39 +39,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".textrecognition.TextRecognitionActivity"
+            android:name="com.findmore.findmore.firebase_ml.textrecognition.TextRecognitionActivity"
             android:label="@string/text_recognition"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".facedetection.FaceDetectionActivity"
+            android:name="com.findmore.findmore.firebase_ml.facedetection.FaceDetectionActivity"
             android:label="@string/face_detection"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".barcodescanning.BarcodeScanningActivity"
+            android:name="com.findmore.findmore.firebase_ml.barcodescanning.BarcodeScanningActivity"
             android:label="@string/barcode_scanning"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".imagelabeling.ImageLabelingActivity"
+            android:name="com.findmore.findmore.firebase_ml.imagelabeling.ImageLabelingActivity"
             android:label="@string/image_labeling"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".landmarkrecognition.LandmarkRecognitionActivity"
+            android:name="com.findmore.findmore.firebase_ml.landmarkrecognition.LandmarkRecognitionActivity"
             android:label="@string/landmark_recognition"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".languageidentification.LanguageIdentificationActivity"
+            android:name="com.findmore.findmore.firebase_ml.languageidentification.LanguageIdentificationActivity"
             android:label="@string/language_identification"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".smartreply.SmartReplyActivity"
+            android:name="com.findmore.findmore.firebase_ml.smartreply.SmartReplyActivity"
             android:label="@string/smart_reply"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".firebase_ml.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
      <!--   <activity
             android:name=".custommodels.CustomModelsActivity"

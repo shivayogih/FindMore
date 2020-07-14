@@ -6,6 +6,11 @@
     <color name="darkergrey1">#3D3C3C</color>
     <color name="darkergrey2">#333232</color>
     <color name="editTextHintColor">#706C6C</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#FFC900</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="primary_black">#212121</color>
+    <color name="secondary_black">#323643</color>
+
+    <color name="colorAccent1">#03DAC5</color>
 </resources>

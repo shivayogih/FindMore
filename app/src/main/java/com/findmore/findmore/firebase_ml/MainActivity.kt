@@ -1,10 +1,9 @@
-package com.findmore.findmore
+package com.findmore.findmore.firebase_ml
 
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.findmore.findmore.MainActivityAdapter
 import com.findmore.findmore.R
 
 import kotlinx.android.synthetic.main.activity_main.*

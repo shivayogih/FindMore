@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".smartreply.SmartReplyActivity">
+    tools:context=".firebase_ml.smartreply.SmartReplyActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

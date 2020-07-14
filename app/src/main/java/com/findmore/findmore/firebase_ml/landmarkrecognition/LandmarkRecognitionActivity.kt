@@ -1,11 +1,8 @@
-package com.findmore.findmore.textrecognition
+package com.findmore.findmore.firebase_ml.landmarkrecognition
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.provider.MediaStore
 
@@ -17,26 +14,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions
+import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmark
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.findmore.findmore.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.activity_text_recognition.*
+import kotlinx.android.synthetic.main.activity_landmark_recognition.*
 
-class TextRecognitionActivity : AppCompatActivity() {
+class LandmarkRecognitionActivity : AppCompatActivity() {
 
-    private val imageView by lazy { findViewById<ImageView>(R.id.text_recognition_image_view)!! }
+    private val imageView by lazy { findViewById<ImageView>(R.id.landmark_recognition_image_view)!! }
 
     private val bottomSheetButton by lazy { findViewById<FrameLayout>(R.id.bottom_sheet_button)!! }
     private val bottomSheetRecyclerView by lazy { findViewById<RecyclerView>(R.id.bottom_sheet_recycler_view)!! }
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(findViewById(R.id.bottom_sheet)!!) }
 
-    private val textRecognitionModels = ArrayList<TextRecognitionModel>()
+    private val landmarkRecognitionModels = ArrayList<LandmarkRecognitionModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_text_recognition)
+        setContentView(R.layout.activity_landmark_recognition)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -45,7 +43,7 @@ class TextRecognitionActivity : AppCompatActivity() {
         }
 
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(this)
-        bottomSheetRecyclerView.adapter = TextRecognitionAdapter(this, textRecognitionModels)
+        bottomSheetRecyclerView.adapter = LandmarkRecognitionAdapter(this, landmarkRecognitionModels)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,18 +67,21 @@ class TextRecognitionActivity : AppCompatActivity() {
         }
 
         imageView.setImageBitmap(null)
-        textRecognitionModels.clear()
+        landmarkRecognitionModels.clear()
         bottomSheetRecyclerView.adapter?.notifyDataSetChanged()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showProgress()
 
         val firebaseVisionImage = FirebaseVisionImage.fromBitmap(image)
-        val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
-        textRecognizer.processImage(firebaseVisionImage)
+        val options = FirebaseVisionCloudDetectorOptions.Builder()
+                .setMaxResults(5)
+                .build()
+        val landmarkDetector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector(options)
+        landmarkDetector.detectInImage(firebaseVisionImage)
                 .addOnSuccessListener {
                     val mutableImage = image.copy(Bitmap.Config.ARGB_8888, true)
 
-                    recognizeText(it, mutableImage)
+                    recognizeLandmarks(it, mutableImage)
 
                     imageView.setImageBitmap(mutableImage)
                     hideProgress()
@@ -93,28 +94,15 @@ class TextRecognitionActivity : AppCompatActivity() {
                 }
     }
 
-    private fun recognizeText(result: FirebaseVisionText?, image: Bitmap?) {
-        if (result == null || image == null) {
+    private fun recognizeLandmarks(landmarks: List<FirebaseVisionCloudLandmark>?, image: Bitmap?) {
+        if (landmarks == null || image == null) {
             Toast.makeText(this, "There was some error", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val canvas = Canvas(image)
-        val rectPaint = Paint()
-        rectPaint.color = Color.RED
-        rectPaint.style = Paint.Style.STROKE
-        rectPaint.strokeWidth = 4F
-        val textPaint = Paint()
-        textPaint.color = Color.RED
-        textPaint.textSize = 40F
+        for (landmark in landmarks) {
 
-        var index = 0
-        for (block in result.textBlocks) {
-            for (line in block.lines) {
-                canvas.drawRect(line.boundingBox!!, rectPaint)
-                canvas.drawText(index.toString(), line.cornerPoints!![2].x.toFloat(), line.cornerPoints!![2].y.toFloat(), textPaint)
-                textRecognitionModels.add(TextRecognitionModel(index++, line.text))
-            }
+            landmarkRecognitionModels.add(LandmarkRecognitionModel(landmark.landmark, landmark.confidence))
         }
     }
 

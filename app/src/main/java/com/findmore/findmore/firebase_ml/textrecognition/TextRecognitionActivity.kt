@@ -1,8 +1,11 @@
-package com.findmore.findmore.imagelabeling
+package com.findmore.findmore.firebase_ml.textrecognition
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.provider.MediaStore
 
@@ -13,29 +16,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.findmore.findmore.R
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
-import com.google.firebase.ml.vision.label.FirebaseVisionOnDeviceImageLabelerOptions
-
+import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.findmore.findmore.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.activity_image_labeling.*
+import kotlinx.android.synthetic.main.activity_text_recognition.*
 
-class ImageLabelingActivity : AppCompatActivity() {
+class TextRecognitionActivity : AppCompatActivity() {
 
-    private val imageView by lazy { findViewById<ImageView>(R.id.image_labeling_image_view)!! }
+    private val imageView by lazy { findViewById<ImageView>(R.id.text_recognition_image_view)!! }
 
     private val bottomSheetButton by lazy { findViewById<FrameLayout>(R.id.bottom_sheet_button)!! }
     private val bottomSheetRecyclerView by lazy { findViewById<RecyclerView>(R.id.bottom_sheet_recycler_view)!! }
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(findViewById(R.id.bottom_sheet)!!) }
 
-    private val imageLabelingModels = ArrayList<ImageLabelingModel>()
+    private val textRecognitionModels = ArrayList<TextRecognitionModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_labeling)
+        setContentView(R.layout.activity_text_recognition)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -44,7 +45,7 @@ class ImageLabelingActivity : AppCompatActivity() {
         }
 
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(this)
-        bottomSheetRecyclerView.adapter = ImageLabelingAdapter(this, imageLabelingModels)
+        bottomSheetRecyclerView.adapter = TextRecognitionAdapter(this, textRecognitionModels)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -68,21 +69,18 @@ class ImageLabelingActivity : AppCompatActivity() {
         }
 
         imageView.setImageBitmap(null)
-        imageLabelingModels.clear()
+        textRecognitionModels.clear()
         bottomSheetRecyclerView.adapter?.notifyDataSetChanged()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showProgress()
 
         val firebaseVisionImage = FirebaseVisionImage.fromBitmap(image)
-        val options = FirebaseVisionOnDeviceImageLabelerOptions.Builder()
-                .setConfidenceThreshold(0.7F)
-                .build()
-        val labelDetector = FirebaseVision.getInstance().getOnDeviceImageLabeler(options)
-        labelDetector.processImage(firebaseVisionImage)
+        val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
+        textRecognizer.processImage(firebaseVisionImage)
                 .addOnSuccessListener {
                     val mutableImage = image.copy(Bitmap.Config.ARGB_8888, true)
 
-                    labelImage(it, mutableImage)
+                    recognizeText(it, mutableImage)
 
                     imageView.setImageBitmap(mutableImage)
                     hideProgress()
@@ -95,15 +93,28 @@ class ImageLabelingActivity : AppCompatActivity() {
                 }
     }
 
-    private fun labelImage(labels: List<FirebaseVisionImageLabel>?, image: Bitmap?) {
-        if (labels == null || image == null) {
+    private fun recognizeText(result: FirebaseVisionText?, image: Bitmap?) {
+        if (result == null || image == null) {
             Toast.makeText(this, "There was some error", Toast.LENGTH_SHORT).show()
             return
         }
 
-        for (label in labels) {
+        val canvas = Canvas(image)
+        val rectPaint = Paint()
+        rectPaint.color = Color.RED
+        rectPaint.style = Paint.Style.STROKE
+        rectPaint.strokeWidth = 4F
+        val textPaint = Paint()
+        textPaint.color = Color.RED
+        textPaint.textSize = 40F
 
-            imageLabelingModels.add(ImageLabelingModel(label.text, label.confidence))
+        var index = 0
+        for (block in result.textBlocks) {
+            for (line in block.lines) {
+                canvas.drawRect(line.boundingBox!!, rectPaint)
+                canvas.drawText(index.toString(), line.cornerPoints!![2].x.toFloat(), line.cornerPoints!![2].y.toFloat(), textPaint)
+                textRecognitionModels.add(TextRecognitionModel(index++, line.text))
+            }
         }
     }
 

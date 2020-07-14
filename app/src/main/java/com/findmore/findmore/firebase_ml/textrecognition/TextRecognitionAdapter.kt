@@ -1,4 +1,4 @@
-package com.findmore.findmore.textrecognition
+package com.findmore.findmore.firebase_ml.textrecognition
 
 import android.annotation.SuppressLint
 import android.content.Context

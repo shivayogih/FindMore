@@ -1,4 +1,4 @@
-package com.findmore.findmore.landmarkrecognition
+package com.findmore.findmore.firebase_ml.landmarkrecognition
 
 import android.annotation.SuppressLint
 import android.content.Context

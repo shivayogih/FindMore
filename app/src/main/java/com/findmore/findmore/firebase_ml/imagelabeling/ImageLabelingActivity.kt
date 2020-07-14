@@ -1,4 +1,4 @@
-package com.findmore.findmore.landmarkrecognition
+package com.findmore.findmore.firebase_ml.imagelabeling
 
 import android.app.Activity
 import android.content.Intent
@@ -13,28 +13,29 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions
-import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmark
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.findmore.findmore.R
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
+import com.google.firebase.ml.vision.label.FirebaseVisionOnDeviceImageLabelerOptions
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.activity_landmark_recognition.*
+import kotlinx.android.synthetic.main.activity_image_labeling.*
 
-class LandmarkRecognitionActivity : AppCompatActivity() {
+class ImageLabelingActivity : AppCompatActivity() {
 
-    private val imageView by lazy { findViewById<ImageView>(R.id.landmark_recognition_image_view)!! }
+    private val imageView by lazy { findViewById<ImageView>(R.id.image_labeling_image_view)!! }
 
     private val bottomSheetButton by lazy { findViewById<FrameLayout>(R.id.bottom_sheet_button)!! }
     private val bottomSheetRecyclerView by lazy { findViewById<RecyclerView>(R.id.bottom_sheet_recycler_view)!! }
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(findViewById(R.id.bottom_sheet)!!) }
 
-    private val landmarkRecognitionModels = ArrayList<LandmarkRecognitionModel>()
+    private val imageLabelingModels = ArrayList<ImageLabelingModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_landmark_recognition)
+        setContentView(R.layout.activity_image_labeling)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -43,7 +44,7 @@ class LandmarkRecognitionActivity : AppCompatActivity() {
         }
 
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(this)
-        bottomSheetRecyclerView.adapter = LandmarkRecognitionAdapter(this, landmarkRecognitionModels)
+        bottomSheetRecyclerView.adapter = ImageLabelingAdapter(this, imageLabelingModels)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,21 +68,21 @@ class LandmarkRecognitionActivity : AppCompatActivity() {
         }
 
         imageView.setImageBitmap(null)
-        landmarkRecognitionModels.clear()
+        imageLabelingModels.clear()
         bottomSheetRecyclerView.adapter?.notifyDataSetChanged()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         showProgress()
 
         val firebaseVisionImage = FirebaseVisionImage.fromBitmap(image)
-        val options = FirebaseVisionCloudDetectorOptions.Builder()
-                .setMaxResults(5)
+        val options = FirebaseVisionOnDeviceImageLabelerOptions.Builder()
+                .setConfidenceThreshold(0.7F)
                 .build()
-        val landmarkDetector = FirebaseVision.getInstance().getVisionCloudLandmarkDetector(options)
-        landmarkDetector.detectInImage(firebaseVisionImage)
+        val labelDetector = FirebaseVision.getInstance().getOnDeviceImageLabeler(options)
+        labelDetector.processImage(firebaseVisionImage)
                 .addOnSuccessListener {
                     val mutableImage = image.copy(Bitmap.Config.ARGB_8888, true)
 
-                    recognizeLandmarks(it, mutableImage)
+                    labelImage(it, mutableImage)
 
                     imageView.setImageBitmap(mutableImage)
                     hideProgress()
@@ -94,15 +95,15 @@ class LandmarkRecognitionActivity : AppCompatActivity() {
                 }
     }
 
-    private fun recognizeLandmarks(landmarks: List<FirebaseVisionCloudLandmark>?, image: Bitmap?) {
-        if (landmarks == null || image == null) {
+    private fun labelImage(labels: List<FirebaseVisionImageLabel>?, image: Bitmap?) {
+        if (labels == null || image == null) {
             Toast.makeText(this, "There was some error", Toast.LENGTH_SHORT).show()
             return
         }
 
-        for (landmark in landmarks) {
+        for (label in labels) {
 
-            landmarkRecognitionModels.add(LandmarkRecognitionModel(landmark.landmark, landmark.confidence))
+            imageLabelingModels.add(ImageLabelingModel(label.text, label.confidence))
         }
     }
 
